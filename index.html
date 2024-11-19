@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript Calculator - Made By Ian.H</title>
+  <style>
+    /* Center the calculator and set a complex black-to-red gradient background */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: radial-gradient(circle at top left, #000000, #330000, #660000); /* Black-to-red gradient background */
+      color: #ffffff;
+    }
+
+    /* Calculator styling with a matching dark gradient and red shadow */
+    .calculator {
+      border: none;
+      border-radius: 15px;
+      width: 260px;
+      padding: 20px;
+      background: linear-gradient(145deg, #1a1a1a, #330000); /* Dark gradient for calculator */
+      box-shadow: 10px 10px 20px rgba(102, 0, 0, 0.5),
+                  -5px -5px 15px rgba(255, 0, 0, 0.2); /* Red shadow for emphasis */
+    }
+
+    /* Display styling with a dark background and red shadow */
+    .display {
+      width: 100%;
+      height: 50px;
+      font-size: 1.5rem;
+      padding: 10px;
+      text-align: right;
+      border-radius: 8px;
+      border: none;
+      color: #ffffff;
+      background-color: #1a1a1a; /* Dark display background */
+      box-shadow: inset 2px 2px 5px rgba(255, 0, 0, 0.3); /* Inner red shadow */
+      margin-bottom: 15px;
+    }
+
+    /* Grid layout for calculator buttons */
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    /* Button styling with dark background, red highlights, and shadow */
+    .button {
+      padding: 20px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      border: none;
+      border-radius: 10px;
+      color: #ffffff;
+      background-color: #333333; /* Dark button background */
+      box-shadow: 3px 3px 5px rgba(102, 0, 0, 0.5),
+                  -3px -3px 5px rgba(255, 0, 0, 0.2); /* Red shadow */
+      transition: all 0.2s ease;
+    }
+    .button:hover {
+      background-color: #4d0000; /* Dark red on hover */
+    }
+
+    /* Operator and equals button styles */
+    .button.operator {
+      background-color: #b30000; /* Red for operators */
+      color: #fff;
+      box-shadow: 3px 3px 5px rgba(102, 0, 0, 0.5),
+                  -3px -3px 5px rgba(255, 0, 0, 0.2);
+    }
+    .button.operator:hover {
+      background-color: #cc0000; /* Lighter red on hover */
+    }
+
+    .button.equals {
+      grid-column: span 4;
+      background-color: #ff1a1a; /* Bright red for equals button */
+      color: #fff;
+      box-shadow: 3px 3px 5px rgba(102, 0, 0, 0.5),
+                  -3px -3px 5px rgba(255, 0, 0, 0.2);
+    }
+    .button.equals:hover {
+      background-color: #ff3333;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <input type="text" id="display" class="display" disabled />
+    <div class="buttons">
+      <button class="button" onclick="appendNumber('7')">7</button>
+      <button class="button" onclick="appendNumber('8')">8</button>
+      <button class="button" onclick="appendNumber('9')">9</button>
+      <button class="button operator" onclick="chooseOperator('/')">÷</button>
+
+      <button class="button" onclick="appendNumber('4')">4</button>
+      <button class="button" onclick="appendNumber('5')">5</button>
+      <button class="button" onclick="appendNumber('6')">6</button>
+      <button class="button operator" onclick="chooseOperator('*')">×</button>
+
+      <button class="button" onclick="appendNumber('1')">1</button>
+      <button class="button" onclick="appendNumber('2')">2</button>
+      <button class="button" onclick="appendNumber('3')">3</button>
+      <button class="button operator" onclick="chooseOperator('-')">−</button>
+
+      <button class="button" onclick="appendNumber('0')">0</button>
+      <button class="button" onclick="appendNumber('.')">.</button>
+      <button class="button" onclick="clearDisplay()">C</button>
+      <button class="button operator" onclick="chooseOperator('+')">+</button>
+
+      <button class="button equals" onclick="calculate()">=</button>
+    </div>
+  </div>
+
+  <script>
+    let currentOperand = '';
+    let previousOperand = '';
+    let operation = null;
+
+    const display = document.getElementById('display');
+
+    function appendNumber(number) {
+      if (number === '.' && currentOperand.includes('.')) return;
+      currentOperand += number;
+      updateDisplay();
+    }
+
+    function updateDisplay() {
+      display.value = currentOperand;
+    }
+
+    function chooseOperator(op) {
+      if (currentOperand === '') return;
+      if (previousOperand !== '') {
+        calculate();
+      }
+      operation = op;
+      previousOperand = currentOperand;
+      currentOperand = '';
+    }
+
+    function clearDisplay() {
+      currentOperand = '';
+      previousOperand = '';
+      operation = null;
+      updateDisplay();
+    }
+
+    function calculate() {
+      let result;
+      const prev = parseFloat(previousOperand);
+      const current = parseFloat(currentOperand);
+
+      if (isNaN(prev) || isNaN(current)) return;
+
+      switch (operation) {
+        case '+':
+          result = prev + current;
+          break;
+        case '-':
+          result = prev - current;
+          break;
+        case '*':
+          result = prev * current;
+          break;
+        case '/':
+          result = current !== 0 ? prev / current : 'Error';
+          break;
+        default:
+          return;
+      }
+
+      currentOperand = result.toString();
+      operation = null;
+      previousOperand = '';
+      updateDisplay();
+    }
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
